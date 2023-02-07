@@ -11,7 +11,7 @@ const TaskSchema = new Schema(
       ref: "User",
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 export default model("Tasks", TaskSchema);
