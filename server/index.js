@@ -9,6 +9,12 @@ import auth from "./routes/auth.js";
 import users from "./routes/users.js";
 import tasks from "./routes/tasks.js";
 import validateToken from "./utils/validateToken.js"
+import adminManagement from "./utils/adminManagement.js"
+
+
+// create user: admin/admin
+// to init
+adminManagement()
 
 config();
 // Variables
@@ -36,6 +42,7 @@ app.use("/api/tasks", validateToken, tasks);
 
 // Connection with Mongo Atlas
 mongoose.set("strictQuery", false);
+mongoose.set("strictPopulate", false);
 mongoose
   .connect(DB)
   .then(() => console.log("Connection with the database established"))
