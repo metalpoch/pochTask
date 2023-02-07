@@ -8,6 +8,7 @@ const route = Router();
 
 const userLogin = async (username, password) => {
   const user = await Users.findOne({ username });
+  if(!user) return false
   const checkPass = await bcryptjs.compare(password, user.password);
   return user && checkPass ? user : false;
 };
@@ -19,7 +20,7 @@ route.post("/", (req, res) => {
     .then((user) => {
       if (user) {
         const token = jwt.sign(
-          { alias: user.alias, rank: user.rank },
+          { id: user.id, alias: user.alias, rank: user.rank },
           SECRET,
           { expiresIn: "15m" }
         );
