@@ -7,8 +7,8 @@ const route = Router();
 
 const getUsers = async (id) => {
   return id
-    ? await Users.findById(id)
-    : await Users.find()
+    ? await Users.findById(id).populate("Tasks")
+    : await Users.find().populate("Tasks")
 };
 
 const createUser = async (credentials) => {
@@ -34,11 +34,20 @@ const createUser = async (credentials) => {
 };
 
 route.get("/", (req, res) => {
-  if(req.user.rank !== "admin") return res.status(401).json({error: "Access Denied"})
-  const result = getUsers();
-  result
-    .then((data) => res.json(data))
-    .catch((error) => res.status(400).json({ error }));
+  const { id, rank } = req.user;
+  if (rank === "admin") {
+    const result = getUsers();
+    result
+      .then((data) => res.json(data))
+      .catch((error) => res.status(400).json({ error: error.message }));
+  } else if (rank === "user") {
+    const result = getUsers(id);
+    result
+      .then((data) => res.json(data))
+      .catch((error) => res.status(400).json({ error: error.message }));
+  } else {
+    res.status(401).json({ error: "Access Denied" });
+  }
 });
 
 route.post("/signup", (req, res) => {
