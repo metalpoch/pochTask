@@ -6,15 +6,14 @@ import cors from "cors";
 import morgan from "morgan";
 import { config } from "dotenv";
 import auth from "./routes/auth.js";
+import admin from "./routes/admin.js";
 import users from "./routes/users.js";
 import tasks from "./routes/tasks.js";
-import validateToken from "./utils/validateToken.js"
-import adminManagement from "./utils/adminManagement.js"
+import validateToken from "./utils/validateToken.js";
+import adminManagement from "./utils/adminManagement.js";
 
-
-// create user: admin/admin
-// to init
-adminManagement()
+// create user to init: admin/admin
+adminManagement();
 
 config();
 // Variables
@@ -30,15 +29,18 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
-app.use(session({
-  secret: SECRET,
-  resave: true,
-  saveUninitialized: true,
-  store: MongoStore.create({mongoUrl: DB})
-}))
+app.use(
+  session({
+    secret: SECRET,
+    resave: true,
+    saveUninitialized: true,
+    store: MongoStore.create({ mongoUrl: DB }),
+  })
+);
 app.use("/api/auth", auth);
-app.use("/api/users", validateToken, users);
-app.use("/api/tasks", validateToken, tasks);
+app.use("/api/users", users);
+app.use("/api/tasks", tasks);
+app.use("/api/admin", validateToken, admin);
 
 // Connection with Mongo Atlas
 mongoose.set("strictQuery", false);
