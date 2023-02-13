@@ -7,7 +7,7 @@ import morgan from "morgan";
 import { config } from "dotenv";
 import auth from "./routes/auth.js";
 import admin from "./routes/admin.js";
-import users from "./routes/users.js";
+import profile from "./routes/profile.js";
 import tasks from "./routes/tasks.js";
 import validateToken from "./utils/validateToken.js";
 import adminManagement from "./utils/adminManagement.js";
@@ -38,8 +38,8 @@ app.use(
   })
 );
 app.use("/api/auth", auth);
-app.use("/api/users", users);
-app.use("/api/tasks", tasks);
+app.use("/api/profile", validateToken, profile);
+app.use("/api/tasks", validateToken, tasks);
 app.use("/api/admin", validateToken, admin);
 
 // Connection with Mongo Atlas

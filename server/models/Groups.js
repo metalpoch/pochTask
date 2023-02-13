@@ -15,7 +15,6 @@ const MemberSchema = new Schema(
   { timestamps: true, versionKey: false }
 );
 
-
 const GroupSchema = new Schema(
   {
     name: { type: String, require: true },
